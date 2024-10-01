@@ -16,7 +16,7 @@ router
   .get(auth('getCalendarRecords'), validate(calendarValidation.getCalendarRecords), calendarController.getCalendarRecords);
 
 router
-  .route('/:calendarRecordId')
+  .route('/:calendarId')
   .get(auth('getCalendarRecords'), validate(calendarValidation.getCalendarRecord), calendarController.getCalendarRecord)
   .patch(
     auth('manageCalendarRecords'),

@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 const Joi = require('joi');
+const { objectId } = require('./custom.validation');
 
 const createCalendarRecord = {
   body: Joi.object().keys({
@@ -24,6 +25,7 @@ const getCalendarRecords = {
 
 const getCalendarRecord = {
   params: Joi.object().keys({
+    calendarId: Joi.string().custom(objectId),
   }),
 };
 

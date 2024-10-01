@@ -17,7 +17,7 @@ const getCalendarRecords = catchAsync(async (req, res) => {
 });
 
 const getCalendarRecord = catchAsync(async (req, res) => {
-  const calendar = await calendarService.getCalendarById(req.params.calendarRecordId);
+  const calendar = await calendarService.getCalendarById(req.params.calendarId);
   if (!calendar) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Calendar record not found');
   }
@@ -25,12 +25,12 @@ const getCalendarRecord = catchAsync(async (req, res) => {
 });
 
 const udpateCalendarRecord = catchAsync(async (req, res) => {
-  const calendar = await calendarService.updateCalendarById(req.params.calendarRecordId, req.body);
+  const calendar = await calendarService.updateCalendarById(req.params.calendarId, req.body);
   res.send(calendar);
 });
 
 const deleteCalendarRecord = catchAsync(async (req, res) => {
-  await calendarService.deleteCalendarRecordById(req.params.calendarRecordId);
+  await calendarService.deleteCalendarRecordById(req.params.calendarId);
   res.status(httpStatus.NO_CONTENT).send();
 });
 
