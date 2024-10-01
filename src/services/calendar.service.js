@@ -21,8 +21,9 @@ const createCalendarRecord = async (calendarBody) => {
  * @returns {Promise<QueryResult>}
  */
 const queryCalendarRecords = async (filter, options) => {
-  const users = await Calendar.paginate(filter, options);
-  return users;
+  console.log(Calendar)
+  const calendar = await Calendar.paginate(filter, options);
+  return calendar;
 };
 
 /**

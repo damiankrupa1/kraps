@@ -21,7 +21,7 @@ router
   .patch(
     auth('manageCalendarRecords'),
     validate(calendarValidation.updateCalendarRecord),
-    calendarController.updateCalendarRecord
+    calendarController.udpateCalendarRecord
   )
   .delete(
     auth('manageCalendarRecords'),
@@ -34,17 +34,16 @@ module.exports = router;
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: User management and retrieval
+ *   name: Calendar
+ *   description: Calendar management and retrieval
  */
 
 /**
  * @swagger
- * /users:
+ * /calendar:
  *   post:
- *     summary: Create a user
- *     description: Only admins can create other users.
- *     tags: [Users]
+ *     summary: Create a calendar record
+ *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -54,61 +53,53 @@ module.exports = router;
  *           schema:
  *             type: object
  *             required:
+ *               - title
  *               - name
- *               - email
- *               - password
- *               - role
+ *               - start
+ *               - end
  *             properties:
  *               name:
  *                 type: string
- *               email:
+ *               title:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
+ *               start:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
- *               role:
- *                  type: string
- *                  enum: [user, admin]
+ *               end:
+ *                 type: string
  *             example:
  *               name: fake name
- *               email: fake@example.com
- *               password: password1
- *               role: user
+ *               title: fake title
+ *               start: '2024-10-01 11:11'
+ *               end: '2024-10-01 15:11'
  *     responses:
  *       "201":
  *         description: Created
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
- *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
+ *                $ref: '#/components/schemas/Calendar'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
  *         $ref: '#/components/responses/Forbidden'
  *
  *   get:
- *     summary: Get all users
- *     description: Only admins can retrieve all users.
- *     tags: [Users]
+ *     summary: Get all calendar records
+ *     description: Only admins can retrieve all calendar records.
+ *     tags: [Calendar]
  *     security:
  *       - bearerAuth: []
  *     parameters:
  *       - in: query
+ *         name: title
+ *         schema:
+ *           type: string
+ *         description: Calendar event name
+ *       - in: query
  *         name: name
  *         schema:
  *           type: string
- *         description: User name
- *       - in: query
- *         name: role
- *         schema:
- *           type: string
- *         description: User role
+ *         description: Calendar event user
  *       - in: query
  *         name: sortBy
  *         schema:
@@ -120,7 +111,7 @@ module.exports = router;
  *           type: integer
  *           minimum: 1
  *         default: 10
- *         description: Maximum number of users
+ *         description: Maximum number of calendar events
  *       - in: query
  *         name: page
  *         schema:
@@ -139,7 +130,7 @@ module.exports = router;
  *                 results:
  *                   type: array
  *                   items:
- *                     $ref: '#/components/schemas/User'
+ *                     $ref: '#/components/schemas/Calendar'
  *                 page:
  *                   type: integer
  *                   example: 1
@@ -160,11 +151,11 @@ module.exports = router;
 
 /**
  * @swagger
- * /users/{id}:
+ * /calendar/{id}:
  *   get:
- *     summary: Get a user
- *     description: Logged in users can fetch only their own user information. Only admins can fetch other users.
- *     tags: [Users]
+ *     summary: Get a calendar event
+ *     description: get calendar events
+ *     tags: [Calendar events]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -173,14 +164,14 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Calendar event id
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
+ *                $ref: '#/components/schemas/Calendar'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -189,9 +180,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   patch:
- *     summary: Update a user
- *     description: Logged in users can only update their own information. Only admins can update other users.
- *     tags: [Users]
+ *     summary: Update a calendar event
+ *     description: Calendar
+ *     tags: [Calendar events]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -208,30 +199,30 @@ module.exports = router;
  *           schema:
  *             type: object
  *             properties:
+ *               title:
+ *                 type: string
  *               name:
  *                 type: string
- *               email:
+ *               start:
  *                 type: string
- *                 format: email
- *                 description: must be unique
- *               password:
+ *               end:
  *                 type: string
- *                 format: password
- *                 minLength: 8
- *                 description: At least one number and one letter
+ *               color:
+ *                 type: string
+ *               isEditable:
+ *                 type: boolean
  *             example:
  *               name: fake name
- *               email: fake@example.com
- *               password: password1
+ *               title: fake title
+ *               start: '2024-10-01 11:11'
+ *               end: '2024-10-01 15:11'
  *     responses:
  *       "200":
  *         description: OK
  *         content:
  *           application/json:
  *             schema:
- *                $ref: '#/components/schemas/User'
- *       "400":
- *         $ref: '#/components/responses/DuplicateEmail'
+ *                $ref: '#/components/schemas/Calendar'
  *       "401":
  *         $ref: '#/components/responses/Unauthorized'
  *       "403":
@@ -240,9 +231,9 @@ module.exports = router;
  *         $ref: '#/components/responses/NotFound'
  *
  *   delete:
- *     summary: Delete a user
- *     description: Logged in users can delete only themselves. Only admins can delete other users.
- *     tags: [Users]
+ *     summary: Delete a calendar event
+ *     description: Delete
+ *     tags: [Calendar events]
  *     security:
  *       - bearerAuth: []
  *     parameters:
@@ -251,7 +242,7 @@ module.exports = router;
  *         required: true
  *         schema:
  *           type: string
- *         description: User id
+ *         description: Calendar event id
  *     responses:
  *       "200":
  *         description: No content

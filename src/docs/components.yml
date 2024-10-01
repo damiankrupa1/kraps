@@ -19,6 +19,30 @@ components:
         name: fake name
         role: user
 
+    Calendar:
+      type: object
+      properties:
+        title:
+          type: string
+        name:
+          type: string
+        start:
+          type: string
+        end:
+          type: string
+        color:
+          type: string
+        isEditable:
+          type: boolean
+      example:
+        id: 5ebac534954b54139806c112
+        title: fake title
+        name: fake name
+        start: 2024-10-01 11:11
+        end: 2024-10-01 15:11
+        color: #333
+        isEditable: true
+
     Token:
       type: object
       properties:

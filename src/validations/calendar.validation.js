@@ -3,16 +3,19 @@ const Joi = require('joi');
 
 const createCalendarRecord = {
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    title: Joi.string().required(),
     name: Joi.string().required(),
-    role: Joi.string().required().valid('user', 'admin'),
+    start: Joi.string().required(),
+    end: Joi.string().required(),
   }),
 };
 
 const getCalendarRecords = {
   query: Joi.object().keys({
+    title: Joi.string(),
     name: Joi.string(),
-    role: Joi.string(),
+    start: Joi.string(),
+    end: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
